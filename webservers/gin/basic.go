@@ -10,7 +10,7 @@ func setupRouter() *gin.Engine {
 	r := gin.Default()
 
 	r.GET("/", func(c *gin.Context) {
-		c.String(http.StatusOK, "Gin web server running...")
+		c.String(http.StatusOK, "Gin router running...")
 	})
 
 	return r
