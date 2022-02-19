@@ -11,7 +11,7 @@ func setupRouter() *chi.Mux {
 
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
-		_, _ = w.Write([]byte("Chi web server running..."))
+		_, _ = w.Write([]byte("Chi router running..."))
 	})
 
 	return r
