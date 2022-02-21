@@ -11,6 +11,7 @@ require (
 	github.com/dustin/go-humanize v1.0.0
 	github.com/gin-gonic/gin v1.7.7
 	github.com/go-chi/chi/v5 v5.0.7
+	github.com/gorilla/mux v1.8.0
 	github.com/gsainz/airborne v0.8.1
 	github.com/gsainz/autocannon v0.5.1
 	github.com/jbenet/goprocess v0.1.3

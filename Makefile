@@ -1,4 +1,4 @@
-phony: gin chi airborne
+phony: gin chi airborne echo node gorilla
 
 start-gin:
 	go run ./webservers/gin/basic.go
@@ -14,6 +14,9 @@ start-echo:
 
 start-node:
 	node ./webservers/node_express/index.js
+
+start-gorilla:
+	go run ./webservers/gorilla/basic.go
 
 #Gin Router
 gin:
@@ -39,3 +42,8 @@ echo:
 node:
 	go run autocannon.go -uri=http://localhost:3004 -connections=1 -pipelining=8
 	go run autocannon.go -uri=http://localhost:3004 -connections=64 -pipelining=8
+
+# Gorilla Router
+gorilla:
+	go run autocannon.go -uri=http://localhost:3005 -connections=1 -pipelining=8
+	go run autocannon.go -uri=http://localhost:3005 -connections=64 -pipelining=8
