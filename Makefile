@@ -1,4 +1,4 @@
-phony: gin chi airborne echo node gorilla
+phony: gin chi airborne echo node gorilla fiber fasthttp netcore
 
 start-gin:
 	go run ./webservers/gin/basic.go
@@ -17,6 +17,16 @@ start-node:
 
 start-gorilla:
 	go run ./webservers/gorilla/basic.go
+
+start-fiber:
+	go run ./webservers/fiber/basic.go
+
+start-fasthttp:
+	go run ./webservers/fasthttp/basic.go
+
+start-netcore:
+	cd \webservers\netcore
+	dotnet run
 
 #Gin Router
 gin:
@@ -47,3 +57,18 @@ node:
 gorilla:
 	go run autocannon.go -uri=http://localhost:3005 -connections=1 -pipelining=8
 	go run autocannon.go -uri=http://localhost:3005 -connections=64 -pipelining=8
+
+# fasthttp Router
+fasthttp:
+	go run autocannon.go -uri=http://localhost:3006 -connections=1 -pipelining=8
+	go run autocannon.go -uri=http://localhost:3006 -connections=64 -pipelining=8
+
+# fiber Router
+fiber:
+	go run autocannon.go -uri=http://localhost:3007 -connections=1 -pipelining=8
+	go run autocannon.go -uri=http://localhost:3007 -connections=64 -pipelining=8
+
+# NETCore Router
+netcore:
+	go run autocannon.go -uri=http://localhost:5000/WeatherForecast -connections=1 -pipelining=8
+	go run autocannon.go -uri=http://localhost:5000/WeatherForecast -connections=64 -pipelining=8
