@@ -2,15 +2,33 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"unsafe"
 
 	"github.com/dgrr/http2"
 	"github.com/valyala/fasthttp"
 )
 
-// this is not as router but just a simple straight handler
+func b2s(b []byte) string {
+	return *(*string)(unsafe.Pointer(&b))
+}
+
+// func s2b(s string) (b []byte) {
+// 	bh := (*reflect.SliceHeader)(unsafe.Pointer(&b))
+// 	sh := (*reflect.StringHeader)(unsafe.Pointer(&s))
+// 	bh.Data = sh.Data
+// 	bh.Cap = sh.Len
+// 	bh.Len = sh.Len
+// 	return b
+// }
 
 func fastHTTPHandler(ctx *fasthttp.RequestCtx) {
-	fmt.Fprint(ctx, "FastHttp webserver running...")
+	path := b2s(ctx.Path())
+
+	switch path {
+	case "/":
+		_, _ = fmt.Fprint(ctx, "FastHttp webserver running...")
+	}
 }
 
 func main() {
@@ -21,5 +39,5 @@ func main() {
 
 	http2.ConfigureServer(s, http2.ServerConfig{})
 
-	s.ListenAndServe(":3006")
+	log.Fatal(s.ListenAndServe(":3006"))
 }

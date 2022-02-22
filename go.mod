@@ -1,4 +1,4 @@
-module autocannon
+module github.com/gsainz/autocannon
 
 go 1.17
 
@@ -15,7 +15,6 @@ require (
 	github.com/gofiber/fiber/v2 v2.27.0
 	github.com/gorilla/mux v1.8.0
 	github.com/gsainz/airborne v0.8.1
-	github.com/gsainz/autocannon v0.5.1
 	github.com/jbenet/goprocess v0.1.3
 	github.com/labstack/echo/v4 v4.6.3
 	github.com/olekukonko/tablewriter v0.0.4

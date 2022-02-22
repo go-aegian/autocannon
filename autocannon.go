@@ -8,9 +8,9 @@ import (
 	"os"
 	"time"
 
-	"autocannon/hdrhistogram"
 	"github.com/briandowns/spinner"
 	"github.com/dustin/go-humanize"
+	"github.com/gsainz/autocannon/hdrhistogram"
 	"github.com/jbenet/goprocess"
 	"github.com/olekukonko/tablewriter"
 	"github.com/ttacon/chalk"
@@ -99,7 +99,6 @@ func main() {
 			spin.Stop()
 
 			fmt.Println("")
-			fmt.Println("")
 			shortLatency := tablewriter.NewWriter(os.Stdout)
 			shortLatency.SetRowSeparator("-")
 			shortLatency.SetHeader([]string{
@@ -131,7 +130,6 @@ func main() {
 				fmt.Sprintf("%v ms", latencies.Max()),
 			})
 			shortLatency.Render()
-			fmt.Println("")
 			fmt.Println("")
 
 			requestsTable := tablewriter.NewWriter(os.Stdout)
@@ -177,15 +175,11 @@ func main() {
 			requestsTable.Render()
 
 			fmt.Println("")
-			fmt.Println("Req/Bytes counts sampled once per second.")
-			fmt.Println("")
-			fmt.Println("")
 			fmt.Println(fmt.Sprintf("%v 2xx responses, %v non 2xx responses.", resp2xx, respN2xx))
 			fmt.Println(fmt.Sprintf("%v total requests in %v seconds, %s read.", formatBigNum(float64(totalResp)), *runtime, humanize.Bytes(uint64(totalBytes))))
 			if errors > 0 {
 				fmt.Println(fmt.Sprintf("%v total errors (%v timeouts).", formatBigNum(float64(errors)), formatBigNum(float64(timeouts))))
 			}
-			fmt.Println("Done!")
 
 			os.Exit(0)
 		}

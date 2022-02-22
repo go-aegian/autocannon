@@ -12,9 +12,6 @@ start-airborne:
 start-echo:
 	go run ./webservers/echo/basic.go
 
-start-node:
-	node ./webservers/node_express/index.js
-
 start-gorilla:
 	go run ./webservers/gorilla/basic.go
 
@@ -24,9 +21,11 @@ start-fiber:
 start-fasthttp:
 	go run ./webservers/fasthttp/basic.go
 
+start-node:
+	node ./webservers/node_express/index.js
+
 start-netcore:
-	cd \webservers\netcore
-	dotnet run
+	dotnet run --project ./webservers/netcore/netcore.csproj
 
 #Gin Router
 gin:
@@ -70,5 +69,5 @@ fiber:
 
 # NETCore Router
 netcore:
-	go run autocannon.go -uri=http://localhost:5000/WeatherForecast -connections=1 -pipelining=8
-	go run autocannon.go -uri=http://localhost:5000/WeatherForecast -connections=64 -pipelining=8
+	go run autocannon.go -uri=http://localhost:3008/WeatherForecast -connections=1 -pipelining=8
+	go run autocannon.go -uri=http://localhost:3008/WeatherForecast -connections=64 -pipelining=8
