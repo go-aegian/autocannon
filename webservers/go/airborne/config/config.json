@@ -1,0 +1,12 @@
+{
+  "push": [],
+  "gzip": true,
+  "ports": {
+    "http": 3002,
+    "https": 3003
+  },
+  "certificate": {
+    "cert": "",
+    "key": ""
+  }
+}

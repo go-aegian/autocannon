@@ -1,9 +1,11 @@
 package main
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/gsainz/autocannon/webservers/go"
 )
 
 func setupRouter() *chi.Mux {
@@ -11,7 +13,7 @@ func setupRouter() *chi.Mux {
 
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
-		_, _ = w.Write([]byte("Chi router running..."))
+		_, _ = w.Write(weather.Predict(5))
 	})
 
 	return r
@@ -19,5 +21,5 @@ func setupRouter() *chi.Mux {
 
 func main() {
 	r := setupRouter()
-	http.ListenAndServe(":3001", r)
+	log.Fatal(http.ListenAndServe(":3001", r))
 }

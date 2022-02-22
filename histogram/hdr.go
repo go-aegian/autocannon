@@ -1,7 +1,7 @@
-// Package hdrhistogram provides an implementation of Gil Tene's HDR Histogram
-// data structure. The HDR Histogram allows for fast and accurate analysis of
-// the extreme ranges of data with non-normal distributions, like latency.
-package hdrhistogram
+// Package histogram provides an implementation of Gil Tene's HDR Histogram data structure.
+// The HDR Histogram allows for fast and accurate analysis of the extreme ranges of data
+// with non-normal distributions, like latency.
+package histogram
 
 import (
 	"fmt"
@@ -41,8 +41,7 @@ type Histogram struct {
 	counts                      []int64
 }
 
-// New returns a new Histogram instance capable of tracking values in the given
-// range and with the given amount of precision.
+// New returns a new Histogram instance capable of tracking values in the given range and with the given amount of precision.
 func New(minValue, maxValue int64, significantFigures int) *Histogram {
 	if significantFigures < 1 || 5 < significantFigures {
 		panic(fmt.Errorf("significantFigures must be [1,5] (was %d)", significantFigures))
@@ -94,8 +93,7 @@ func New(minValue, maxValue int64, significantFigures int) *Histogram {
 	}
 }
 
-// ByteSize returns an estimate of the amount of memory allocated to the
-// histogram in bytes.
+// ByteSize returns an estimate of the amount of memory allocated to the histogram in bytes.
 //
 // N.B.: This does not take into account the overhead for slices, which are
 // small, constant, and specific to the compiler version.
@@ -184,8 +182,7 @@ func (h *Histogram) StdDev() float64 {
 	return math.Sqrt(geometricDevTotal / float64(h.totalCount))
 }
 
-// Reset deletes all recorded values and restores the histogram to its original
-// state.
+// Reset deletes all recorded values and restores the histogram to its original state.
 func (h *Histogram) Reset() {
 	h.totalCount = 0
 	for i := range h.counts {
@@ -193,17 +190,14 @@ func (h *Histogram) Reset() {
 	}
 }
 
-// RecordValue records the given value, returning an error if the value is out
-// of range.
+// RecordValue records the given value, returning an error if the value is out of range.
 func (h *Histogram) RecordValue(v int64) error {
 	return h.RecordValues(v, 1)
 }
 
-// RecordCorrectedValue records the given value, correcting for stalls in the
-// recording process. This only works for processes which are recording values
-// at an expected interval (e.g., doing jitter analysis). Processes which are
-// recording ad-hoc values (e.g., latency for incoming requests) can't take
-// advantage of this.
+// RecordCorrectedValue records the given value, correcting for stalls in the recording process.
+// This only works for processes which are recording values at an expected interval (e.g., doing jitter analysis).
+// Processes which are recording ad-hoc values (e.g., latency for incoming requests) can't take advantage of this.
 func (h *Histogram) RecordCorrectedValue(v, expectedInterval int64) error {
 	if err := h.RecordValue(v); err != nil {
 		return err
@@ -224,8 +218,7 @@ func (h *Histogram) RecordCorrectedValue(v, expectedInterval int64) error {
 	return nil
 }
 
-// RecordValues records n occurrences of the given value, returning an error if
-// the value is out of range.
+// RecordValues records n occurrences of the given value, returns an error if the value is out of range.
 func (h *Histogram) RecordValues(v, n int64) error {
 	idx := h.countsIndexFor(v)
 	if idx < 0 || int(h.countsLen) <= idx {
@@ -260,8 +253,7 @@ func (h *Histogram) ValueAtPercentile(q float64) int64 {
 	return 0
 }
 
-// CumulativeDistribution returns an ordered list of brackets of the
-// distribution of recorded values.
+// CumulativeDistribution returns an ordered list of brackets of the distribution of recorded values.
 func (h *Histogram) CumulativeDistribution() []Bracket {
 	var result []Bracket
 
@@ -277,20 +269,17 @@ func (h *Histogram) CumulativeDistribution() []Bracket {
 	return result
 }
 
-// SignificantFigures returns the significant figures used to create the
-// histogram
+// SignificantFigures returns the significant figures used to create the histogram
 func (h *Histogram) SignificantFigures() int64 {
 	return h.significantFigures
 }
 
-// LowestTrackableValue returns the lower bound on values that will be added
-// to the histogram
+// LowestTrackableValue returns the lower bound on values that will be added to the histogram
 func (h *Histogram) LowestTrackableValue() int64 {
 	return h.lowestTrackableValue
 }
 
-// HighestTrackableValue returns the upper bound on values that will be added
-// to the histogram
+// HighestTrackableValue returns the upper bound on values that will be added to the histogram
 func (h *Histogram) HighestTrackableValue() int64 {
 	return h.highestTrackableValue
 }
@@ -511,7 +500,7 @@ type pIterator struct {
 }
 
 func (p *pIterator) next() bool {
-	if !(p.countToIdx < p.h.totalCount) {
+	if p.countToIdx >= p.h.totalCount {
 		if p.seenLastValue {
 			return false
 		}

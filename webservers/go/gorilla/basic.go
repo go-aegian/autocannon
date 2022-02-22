@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
+	"github.com/gsainz/autocannon/webservers/go"
 )
 
 func setupRouter() *mux.Router {
@@ -13,7 +14,7 @@ func setupRouter() *mux.Router {
 
 	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
-		_, _ = w.Write([]byte("Gorilla router running..."))
+		_, _ = w.Write(weather.Predict(5))
 	})
 
 	return r

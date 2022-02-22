@@ -10,7 +10,7 @@ import (
 
 	"github.com/briandowns/spinner"
 	"github.com/dustin/go-humanize"
-	"github.com/gsainz/autocannon/hdrhistogram"
+	"github.com/gsainz/autocannon/histogram"
 	"github.com/jbenet/goprocess"
 	"github.com/olekukonko/tablewriter"
 	"github.com/ttacon/chalk"
@@ -25,11 +25,11 @@ type resp struct {
 
 func main() {
 	uri := flag.String("uri", "", "The uri to benchmark against. (Required)")
-	clients := flag.Int("connections", 10, "The number of connections to open to the server.")
-	pipeliningFactor := flag.Int("pipelining", 1, "The number of pipelined requests to use.")
-	runtime := flag.Int("duration", 10, "The number of seconds to run the auto-cannon.")
+	connections := flag.Int("connections", 10, "The number of connections to open to the server.")
+	pipelining := flag.Int("pipelining", 1, "The number of pipelined requests to use.")
+	duration := flag.Int("duration", 10, "The number of seconds to run the auto-cannon.")
 	timeout := flag.Int("timeout", 10, "The number of seconds before timing out on a request.")
-	debug := flag.Bool("debug", false, "A utility debug flag.")
+	debug := flag.Bool("debug", false, "Output debug log")
 	flag.Parse()
 
 	if *uri == "" {
@@ -37,16 +37,16 @@ func main() {
 		os.Exit(1)
 	}
 
-	fmt.Println(fmt.Sprintf("running %vs test @ %v", *runtime, *uri))
-	fmt.Println(fmt.Sprintf("%v connections with %v pipelining factor.", *clients, *pipeliningFactor))
+	fmt.Println(fmt.Sprintf("\nrunning %vs test for %v", *duration, *uri))
+	fmt.Println(fmt.Sprintf("%v connections with %v pipelining factor.", *connections, *pipelining))
 
 	_ = goprocess.Background()
 
-	respChan, errChan := runClients(*clients, *pipeliningFactor, time.Second*time.Duration(*timeout), *uri)
+	respChan, errChan := runClients(*connections, *pipelining, time.Second*time.Duration(*timeout), *uri)
 
-	latencies := hdrhistogram.New(1, 10000, 5)
-	requests := hdrhistogram.New(1, 1000000, 5)
-	throughput := hdrhistogram.New(1, 100000000000, 5)
+	latencies := histogram.New(1, 10000, 5)
+	requests := histogram.New(1, 1000000, 5)
+	throughput := histogram.New(1, 100000000000, 5)
 
 	var bytes int64 = 0
 	var totalBytes int64 = 0
@@ -60,7 +60,7 @@ func main() {
 	timeouts := 0
 
 	ticker := time.NewTicker(time.Second)
-	runTimeout := time.NewTimer(time.Second * time.Duration(*runtime))
+	runTimeout := time.NewTimer(time.Second * time.Duration(*duration))
 
 	spin := spinner.New(spinner.CharSets[14], 100*time.Millisecond)
 	spin.Suffix = " Running Auto-cannon..."
@@ -176,11 +176,11 @@ func main() {
 
 			fmt.Println("")
 			fmt.Println(fmt.Sprintf("%v 2xx responses, %v non 2xx responses.", resp2xx, respN2xx))
-			fmt.Println(fmt.Sprintf("%v total requests in %v seconds, %s read.", formatBigNum(float64(totalResp)), *runtime, humanize.Bytes(uint64(totalBytes))))
+			fmt.Println(fmt.Sprintf("%v total requests in %v seconds, %s read.", formatBigNum(float64(totalResp)), *duration, humanize.Bytes(uint64(totalBytes))))
 			if errors > 0 {
 				fmt.Println(fmt.Sprintf("%v total errors (%v timeouts).", formatBigNum(float64(errors)), formatBigNum(float64(timeouts))))
 			}
-
+			fmt.Println("")
 			os.Exit(0)
 		}
 	}

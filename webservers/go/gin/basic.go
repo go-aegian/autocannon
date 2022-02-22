@@ -1,9 +1,11 @@
 package main
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/gsainz/autocannon/webservers/go"
 )
 
 func setupRouter() *gin.Engine {
@@ -11,7 +13,7 @@ func setupRouter() *gin.Engine {
 	r := gin.New()
 
 	r.GET("/", func(c *gin.Context) {
-		c.String(http.StatusOK, "Gin router running...")
+		c.JSON(http.StatusOK, weather.Predict(5))
 	})
 
 	return r
@@ -19,5 +21,5 @@ func setupRouter() *gin.Engine {
 
 func main() {
 	r := setupRouter()
-	r.Run(":3000")
+	log.Fatal(r.Run(":3000"))
 }

@@ -1,13 +1,13 @@
-package hdrhistogram_test
+package histogram_test
 
 import (
 	"testing"
 
-	"github.com/gsainz/autocannon/hdrhistogram"
+	"github.com/gsainz/autocannon/histogram"
 )
 
 func TestWindowedHistogram(t *testing.T) {
-	w := hdrhistogram.NewWindowed(2, 1, 1000, 3)
+	w := histogram.NewWindowed(2, 1, 1000, 3)
 
 	for i := 0; i < 100; i++ {
 		_ = w.Current.RecordValue(int64(i))
@@ -29,7 +29,7 @@ func TestWindowedHistogram(t *testing.T) {
 }
 
 func BenchmarkWindowedHistogramRecordAndRotate(b *testing.B) {
-	w := hdrhistogram.NewWindowed(3, 1, 10000000, 3)
+	w := histogram.NewWindowed(3, 1, 10000000, 3)
 	b.ReportAllocs()
 	b.ResetTimer()
 
@@ -45,7 +45,7 @@ func BenchmarkWindowedHistogramRecordAndRotate(b *testing.B) {
 }
 
 func BenchmarkWindowedHistogramMerge(b *testing.B) {
-	w := hdrhistogram.NewWindowed(3, 1, 10000000, 3)
+	w := histogram.NewWindowed(3, 1, 10000000, 3)
 	for i := 0; i < 10000000; i++ {
 		if err := w.Current.RecordValue(100); err != nil {
 			b.Fatal(err)

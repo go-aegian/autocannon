@@ -1,11 +1,11 @@
-package hdrhistogram_test
+package histogram_test
 
 import (
 	"math"
 	"reflect"
 	"testing"
 
-	"github.com/gsainz/autocannon/hdrhistogram"
+	"github.com/gsainz/autocannon/histogram"
 )
 
 func TestHighSigFig(t *testing.T) {
@@ -14,7 +14,7 @@ func TestHighSigFig(t *testing.T) {
 		3964974, 12718782,
 	}
 
-	hist := hdrhistogram.New(459876, 12718782, 5)
+	hist := histogram.New(459876, 12718782, 5)
 	for _, sample := range input {
 		_ = hist.RecordValue(sample)
 	}
@@ -25,7 +25,7 @@ func TestHighSigFig(t *testing.T) {
 }
 
 func TestValueAtPercentile(t *testing.T) {
-	h := hdrhistogram.New(1, 10000000, 3)
+	h := histogram.New(1, 10000000, 3)
 
 	for i := 0; i < 1000000; i++ {
 		if err := h.RecordValue(int64(i)); err != nil {
@@ -54,7 +54,7 @@ func TestValueAtPercentile(t *testing.T) {
 }
 
 func TestMean(t *testing.T) {
-	h := hdrhistogram.New(1, 10000000, 3)
+	h := histogram.New(1, 10000000, 3)
 
 	for i := 0; i < 1000000; i++ {
 		if err := h.RecordValue(int64(i)); err != nil {
@@ -68,7 +68,7 @@ func TestMean(t *testing.T) {
 }
 
 func TestStdDev(t *testing.T) {
-	h := hdrhistogram.New(1, 10000000, 3)
+	h := histogram.New(1, 10000000, 3)
 
 	for i := 0; i < 1000000; i++ {
 		if err := h.RecordValue(int64(i)); err != nil {
@@ -82,7 +82,7 @@ func TestStdDev(t *testing.T) {
 }
 
 func TestTotalCount(t *testing.T) {
-	h := hdrhistogram.New(1, 10000000, 3)
+	h := histogram.New(1, 10000000, 3)
 
 	for i := 0; i < 1000000; i++ {
 		if err := h.RecordValue(int64(i)); err != nil {
@@ -95,7 +95,7 @@ func TestTotalCount(t *testing.T) {
 }
 
 func TestMax(t *testing.T) {
-	h := hdrhistogram.New(1, 10000000, 3)
+	h := histogram.New(1, 10000000, 3)
 
 	for i := 0; i < 1000000; i++ {
 		if err := h.RecordValue(int64(i)); err != nil {
@@ -109,7 +109,7 @@ func TestMax(t *testing.T) {
 }
 
 func TestReset(t *testing.T) {
-	h := hdrhistogram.New(1, 10000000, 3)
+	h := histogram.New(1, 10000000, 3)
 
 	for i := 0; i < 1000000; i++ {
 		if err := h.RecordValue(int64(i)); err != nil {
@@ -125,8 +125,8 @@ func TestReset(t *testing.T) {
 }
 
 func TestMerge(t *testing.T) {
-	h1 := hdrhistogram.New(1, 1000, 3)
-	h2 := hdrhistogram.New(1, 1000, 3)
+	h1 := histogram.New(1, 1000, 3)
+	h2 := histogram.New(1, 1000, 3)
 
 	for i := 0; i < 100; i++ {
 		if err := h1.RecordValue(int64(i)); err != nil {
@@ -148,7 +148,7 @@ func TestMerge(t *testing.T) {
 }
 
 func TestMin(t *testing.T) {
-	h := hdrhistogram.New(1, 10000000, 3)
+	h := histogram.New(1, 10000000, 3)
 
 	for i := 0; i < 1000000; i++ {
 		if err := h.RecordValue(int64(i)); err != nil {
@@ -162,7 +162,7 @@ func TestMin(t *testing.T) {
 }
 
 func TestByteSize(t *testing.T) {
-	h := hdrhistogram.New(1, 100000, 3)
+	h := histogram.New(1, 100000, 3)
 
 	if v, want := h.ByteSize(), 65604; v != want {
 		t.Errorf("ByteSize was %v, but expected %d", v, want)
@@ -170,7 +170,7 @@ func TestByteSize(t *testing.T) {
 }
 
 func TestRecordCorrectedValue(t *testing.T) {
-	h := hdrhistogram.New(1, 100000, 3)
+	h := histogram.New(1, 100000, 3)
 
 	if err := h.RecordCorrectedValue(10, 100); err != nil {
 		t.Fatal(err)
@@ -182,7 +182,7 @@ func TestRecordCorrectedValue(t *testing.T) {
 }
 
 func TestRecordCorrectedValueStall(t *testing.T) {
-	h := hdrhistogram.New(1, 100000, 3)
+	h := histogram.New(1, 100000, 3)
 
 	if err := h.RecordCorrectedValue(1000, 100); err != nil {
 		t.Fatal(err)
@@ -194,7 +194,7 @@ func TestRecordCorrectedValueStall(t *testing.T) {
 }
 
 func TestCumulativeDistribution(t *testing.T) {
-	h := hdrhistogram.New(1, 100000000, 3)
+	h := histogram.New(1, 100000000, 3)
 
 	for i := 0; i < 1000000; i++ {
 		if err := h.RecordValue(int64(i)); err != nil {
@@ -203,7 +203,7 @@ func TestCumulativeDistribution(t *testing.T) {
 	}
 
 	actual := h.CumulativeDistribution()
-	expected := []hdrhistogram.Bracket{
+	expected := []histogram.Bracket{
 		{Quantile: 0, Count: 1, ValueAt: 0},
 		{Quantile: 50, Count: 500224, ValueAt: 500223},
 		{Quantile: 75, Count: 750080, ValueAt: 750079},
@@ -228,7 +228,7 @@ func TestCumulativeDistribution(t *testing.T) {
 }
 
 func TestDistribution(t *testing.T) {
-	h := hdrhistogram.New(8, 1024, 3)
+	h := histogram.New(8, 1024, 3)
 
 	for i := 0; i < 1024; i++ {
 		if err := h.RecordValue(int64(i)); err != nil {
@@ -248,7 +248,7 @@ func TestDistribution(t *testing.T) {
 }
 
 func TestNaN(t *testing.T) {
-	h := hdrhistogram.New(1, 100000, 3)
+	h := histogram.New(1, 100000, 3)
 	if math.IsNaN(h.Mean()) {
 		t.Error("Mean is NaN")
 	}
@@ -259,7 +259,7 @@ func TestNaN(t *testing.T) {
 
 func TestSignificantFigures(t *testing.T) {
 	const sigFigs = 4
-	h := hdrhistogram.New(1, 10, sigFigs)
+	h := histogram.New(1, 10, sigFigs)
 	if h.SignificantFigures() != sigFigs {
 		t.Errorf("Significant figures was %v, expected %d", h.SignificantFigures(), sigFigs)
 	}
@@ -267,7 +267,7 @@ func TestSignificantFigures(t *testing.T) {
 
 func TestLowestTrackableValue(t *testing.T) {
 	const minVal = 2
-	h := hdrhistogram.New(minVal, 10, 3)
+	h := histogram.New(minVal, 10, 3)
 	if h.LowestTrackableValue() != minVal {
 		t.Errorf("LowestTrackableValue figures was %v, expected %d", h.LowestTrackableValue(), minVal)
 	}
@@ -275,14 +275,14 @@ func TestLowestTrackableValue(t *testing.T) {
 
 func TestHighestTrackableValue(t *testing.T) {
 	const maxVal = 11
-	h := hdrhistogram.New(1, maxVal, 3)
+	h := histogram.New(1, maxVal, 3)
 	if h.HighestTrackableValue() != maxVal {
 		t.Errorf("HighestTrackableValue figures was %v, expected %d", h.HighestTrackableValue(), maxVal)
 	}
 }
 
 func BenchmarkHistogramRecordValue(b *testing.B) {
-	h := hdrhistogram.New(1, 10000000, 3)
+	h := histogram.New(1, 10000000, 3)
 	for i := 0; i < 1000000; i++ {
 		if err := h.RecordValue(int64(i)); err != nil {
 			b.Fatal(err)
@@ -300,19 +300,19 @@ func BenchmarkNew(b *testing.B) {
 	b.ReportAllocs()
 
 	for i := 0; i < b.N; i++ {
-		hdrhistogram.New(1, 120000, 3) // this could track 1ms-2min
+		histogram.New(1, 120000, 3) // this could track 1ms-2min
 	}
 }
 
 func TestUnitMagnitudeOverflow(t *testing.T) {
-	h := hdrhistogram.New(0, 200, 4)
+	h := histogram.New(0, 200, 4)
 	if err := h.RecordValue(11); err != nil {
 		t.Fatal(err)
 	}
 }
 
 func TestSubBucketMaskOverflow(t *testing.T) {
-	hist := hdrhistogram.New(2e7, 1e8, 5)
+	hist := histogram.New(2e7, 1e8, 5)
 	for _, sample := range [...]int64{1e8, 2e7, 3e7} {
 		_ = hist.RecordValue(sample)
 	}
@@ -333,7 +333,7 @@ func TestExportImport(t *testing.T) {
 	min := int64(1)
 	max := int64(10000000)
 	significantFigures := 3
-	h := hdrhistogram.New(min, max, significantFigures)
+	h := histogram.New(min, max, significantFigures)
 	for i := 0; i < 1000000; i++ {
 		if err := h.RecordValue(int64(i)); err != nil {
 			t.Fatal(err)
@@ -354,21 +354,21 @@ func TestExportImport(t *testing.T) {
 		t.Errorf("SignificantFigures was %v, but expected %v", v, significantFigures)
 	}
 
-	if imported := hdrhistogram.Import(s); !imported.Equals(h) {
+	if imported := histogram.Import(s); !imported.Equals(h) {
 		t.Error("Expected Histograms to be equivalent")
 	}
 
 }
 
 func TestEquals(t *testing.T) {
-	h1 := hdrhistogram.New(1, 10000000, 3)
+	h1 := histogram.New(1, 10000000, 3)
 	for i := 0; i < 1000000; i++ {
 		if err := h1.RecordValue(int64(i)); err != nil {
 			t.Fatal(err)
 		}
 	}
 
-	h2 := hdrhistogram.New(1, 10000000, 3)
+	h2 := histogram.New(1, 10000000, 3)
 	for i := 0; i < 10000; i++ {
 		if err := h1.RecordValue(int64(i)); err != nil {
 			t.Fatal(err)
