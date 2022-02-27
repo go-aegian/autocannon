@@ -4,11 +4,17 @@ import (
 	"net/http"
 
 	"github.com/gsainz/airborne"
+	"github.com/gsainz/airborne/config"
 	"github.com/gsainz/autocannon/webservers/go"
 )
 
 func setupServer() *airborne.HttpServer {
-	server := airborne.NewServer("./go/airborne/config/", nil)
+	cfg, err := config.FromFile("./go/airborne/config/config.json")
+	if err != nil {
+		panic(err)
+	}
+
+	server := airborne.NewServer(cfg, airborne.NewMux())
 
 	server.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)

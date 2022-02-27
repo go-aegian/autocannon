@@ -5,6 +5,12 @@
     "http": 3002,
     "https": 3003
   },
+  "connection": {
+    "network": "tcp",
+    "keepAlive": true,
+    "keepAlivePeriod": 10000,
+    "lowerLatencyDelay": true
+  },
   "certificate": {
     "cert": "",
     "key": ""
