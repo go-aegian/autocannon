@@ -20,7 +20,7 @@ require (
 	github.com/labstack/echo/v4 v4.6.3
 	github.com/olekukonko/tablewriter v0.0.4
 	github.com/ttacon/chalk v0.0.0-20160626202418-22c06c80ed31
-	github.com/valyala/fasthttp v1.33.0
+	github.com/valyala/fasthttp v1.34.0
 )
 
 require (
