@@ -1,6 +1,6 @@
 module github.com/sainzg/autocannon
 
-go 1.17
+go 1.18
 
 require (
 	github.com/aerogo/aero v1.3.59
