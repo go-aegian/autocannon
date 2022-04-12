@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/gsainz/autocannon/histogram"
+	"github.com/sainzg/autocannon/histogram"
 )
 
 func TestHighSigFig(t *testing.T) {

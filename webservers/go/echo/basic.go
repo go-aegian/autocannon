@@ -3,8 +3,8 @@ package main
 import (
 	"net/http"
 
-	"github.com/gsainz/autocannon/webservers/go"
 	"github.com/labstack/echo/v4"
+	"github.com/sainzg/autocannon/webservers/go"
 )
 
 func setupRouter() *echo.Echo {

@@ -1,5 +1,3 @@
-.PHONY: build
-
 build: test clean
 	go build -o ./build/autocannon ./autocannon.go
 
@@ -8,3 +6,5 @@ test:
 
 clean:
 	go clean ./...
+
+.PHONY: build

@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
-	"github.com/gsainz/autocannon/webservers/go"
+	"github.com/sainzg/autocannon/webservers/go"
 )
 
 func setupRouter() *mux.Router {

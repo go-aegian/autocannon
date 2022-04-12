@@ -10,9 +10,9 @@ import (
 
 	"github.com/briandowns/spinner"
 	"github.com/dustin/go-humanize"
-	"github.com/gsainz/autocannon/histogram"
 	"github.com/jbenet/goprocess"
 	"github.com/olekukonko/tablewriter"
+	"github.com/sainzg/autocannon/histogram"
 	"github.com/ttacon/chalk"
 	"github.com/valyala/fasthttp"
 )

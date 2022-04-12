@@ -1,30 +1,37 @@
 package main
 
 import (
+	"context"
 	"net/http"
 
-	"github.com/gsainz/airborne"
-	"github.com/gsainz/airborne/config"
-	"github.com/gsainz/autocannon/webservers/go"
+	"github.com/sainzg/autocannon/webservers/go"
+	"github.com/sainzg/httpmux"
+	"github.com/sainzg/logger"
+	"github.com/sainzg/server/config"
+	"github.com/sainzg/server/web"
 )
 
-func setupServer() *airborne.HttpServer {
-	cfg, err := config.FromFile("./go/airborne/config/config.json")
+func setupServer(log logger.Logger) web.Server {
+	mux := httpmux.New()
+
+	mux.Get("/", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		_, _ = w.Write(weather.Predict(5))
+	})
+
+	cfg, err := config.FromFile("./config/config.yml")
 	if err != nil {
 		panic(err)
 	}
 
-	server := airborne.NewServer(cfg, airborne.NewMux())
-
-	server.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
-		_, _ = w.Write(weather.Predict(5))
-	})
+	server, err := web.NewFromConfig(&cfg.Http, mux, log)
 
 	return server
 }
 
 func main() {
-	server := setupServer()
-	server.Run()
+	log := logger.NewZap()
+	defer log.Sync()
+	server := setupServer(log)
+	server.Start(context.Background(), nil)
 }

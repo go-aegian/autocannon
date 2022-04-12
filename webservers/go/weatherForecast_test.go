@@ -3,7 +3,7 @@ package weather_test
 import (
 	"testing"
 
-	"github.com/gsainz/autocannon/webservers/go"
+	"github.com/sainzg/autocannon/webservers/go"
 )
 
 func TestForecast(t *testing.T) {

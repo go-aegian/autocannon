@@ -3,7 +3,7 @@ package histogram_test
 import (
 	"testing"
 
-	"github.com/gsainz/autocannon/histogram"
+	"github.com/sainzg/autocannon/histogram"
 )
 
 func TestWindowedHistogram(t *testing.T) {

@@ -1,0 +1,38 @@
+http:
+  ports:
+    http: 5100
+    https: 5101
+  timeout:
+    idle: 180s
+    write: 120s
+    readHeader: 5s
+    read: 120s
+    shutdown: 15ms
+  connection:
+    network: tcp
+    keepAlive: false
+    keepAlivePeriod: 0s
+    lowerLatencyDelay: true
+  certificate:
+    cert: ../certificates/cert.pem
+    key: ../certificates/key.pem
+    useTLS: true
+  maxHeaderBytes: 1048576
+grpc:
+  network: tcp
+  address: 7100
+  certificate:
+    cert: ../certificates/cert.pem
+    key: ../certificates/key.pem
+    useTLS: true
+  keepAlive:
+    enforcementPolicy:
+      minTime: 2s
+      permitWithoutStream: true
+    serverParameters:
+      maxConnectionIdle: 10s
+      maxConnectionAge: 12s
+      maxConnectionAgeGrace: 12s
+      time: 15s
+      timeout: 10s
+      shutdown: 15ms

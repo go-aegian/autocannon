@@ -5,11 +5,11 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/gsainz/autocannon/webservers/go"
+	"github.com/sainzg/autocannon/webservers/go"
 )
 
 func setupRouter() *gin.Engine {
-	gin.SetMode(gin.ReleaseMode)
+	gin.SetMode(gin.DebugMode)
 	r := gin.New()
 
 	r.GET("/", func(c *gin.Context) {

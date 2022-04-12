@@ -5,7 +5,7 @@ import (
 	"unsafe"
 
 	"github.com/dgrr/http2"
-	"github.com/gsainz/autocannon/webservers/go"
+	"github.com/sainzg/autocannon/webservers/go"
 	"github.com/valyala/fasthttp"
 )
 

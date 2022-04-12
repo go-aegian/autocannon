@@ -5,7 +5,7 @@ import (
 	"math"
 	"time"
 
-	"github.com/gsainz/airborne/utils/random"
+	"github.com/sainzg/random"
 )
 
 var summaries = []string{"Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"}

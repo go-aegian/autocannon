@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/aerogo/aero"
-	"github.com/gsainz/autocannon/webservers/go"
+	"github.com/sainzg/autocannon/webservers/go"
 )
 
 func setupServer() *aero.Application {
